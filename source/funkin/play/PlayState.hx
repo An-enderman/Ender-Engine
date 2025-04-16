@@ -54,6 +54,7 @@ import funkin.ui.mainmenu.MainMenuState;
 import funkin.ui.MusicBeatSubState;
 import funkin.ui.transition.LoadingState;
 import funkin.util.SerializerUtil;
+import funkin.util.MathUtil;
 import haxe.Int64;
 #if FEATURE_DISCORD_RPC
 import funkin.api.discord.DiscordClient;
@@ -202,6 +203,21 @@ class PlayState extends MusicBeatSubState
    * TODO: Move this to its own class.
    */
   public var songScore:Int = 0;
+
+  /**
+   * The player's current raw accuracy.
+   */
+  public var songRawAccuracy:Int = 0;
+
+  /**
+   * The player's current accuracy.
+   */
+  public var songAccuracy:Float = 0;
+
+  /**
+   * The player's current raw accuracy.
+   */
+  public var notePassed:Int = 0;
 
   /**
    * Start at this point in the song once the countdown is done.
@@ -478,6 +494,16 @@ class PlayState extends MusicBeatSubState
    * The health icon representing the opponent.
    */
   public var iconP2:HealthIcon;
+
+  /**
+   * The color of the health bar representing the opponent.
+   */
+  public var healthColorP1:FlxColor = Constants.COLOR_HEALTH_BAR_GREEN;
+
+  /**
+   * The color of the health bar representing the player.
+   */
+  public var healthColorP2:FlxColor = Constants.COLOR_HEALTH_BAR_RED;
 
   /**
    * The sprite group containing active player's strumline notes.
@@ -888,6 +914,7 @@ class PlayState extends MusicBeatSubState
 
       health = Constants.HEALTH_STARTING;
       songScore = 0;
+      songAccuracy = 0;
       Highscore.tallies.combo = 0;
       Countdown.performCountdown();
 
@@ -1122,6 +1149,7 @@ class PlayState extends MusicBeatSubState
     opponentStrumline.clean();
 
     songScore = 0;
+    songAccuracy = 0;
     updateScoreText();
 
     health = Constants.HEALTH_STARTING;
@@ -1599,14 +1627,15 @@ class PlayState extends MusicBeatSubState
     healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
       'healthLerp', 0, 2);
     healthBar.scrollFactor.set();
-    healthBar.createFilledBar(Constants.COLOR_HEALTH_BAR_RED, Constants.COLOR_HEALTH_BAR_GREEN);
+    healthBar.createFilledBar(healthColorP2, healthColorP1);
     healthBar.zIndex = 801;
     add(healthBar);
 
     // The score text below the health bar.
-    scoreText = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, '', 20);
-    scoreText.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+    scoreText = new FlxText(0, healthBarBG.y + 40, FlxG.width, '', 20);
+    scoreText.setFormat(Paths.font('FridayNight.ttf'), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
     scoreText.scrollFactor.set();
+    scoreText.borderSize = 1.25;
     scoreText.zIndex = 802;
     add(scoreText);
 
@@ -2159,7 +2188,21 @@ class PlayState extends MusicBeatSubState
     {
       // TODO: Add an option for this maybe?
       var commaSeparated:Bool = true;
-      scoreText.text = 'Score: ${FlxStringUtil.formatMoney(songScore, false, commaSeparated)}';
+      scoreText.text = 'Score: ${FlxStringUtil.formatMoney(songScore, false, commaSeparated)} ';
+
+      if (Highscore.tallies.missed > 0)
+      {
+        scoreText.text += '/ Misses: ${Highscore.tallies.missed} ';
+      }
+
+      if (songAccuracy > 0)
+      {
+        scoreText.text += '/ Accuracy: ${MathUtil.floorDecimal(songAccuracy, 2)}%';
+      }
+      else
+      {
+        scoreText.text += '/ Accuracy: ???';
+      }
     }
   }
 
@@ -2777,15 +2820,21 @@ class PlayState extends MusicBeatSubState
     {
       case 'sick':
         Highscore.tallies.sick += 1;
+        songRawAccuracy += 100;
       case 'good':
         Highscore.tallies.good += 1;
+        songRawAccuracy += 75;
       case 'bad':
         Highscore.tallies.bad += 1;
+        songRawAccuracy += 50;
       case 'shit':
         Highscore.tallies.shit += 1;
+        songRawAccuracy += 25;
       case 'miss':
         Highscore.tallies.missed += 1;
     }
+    notePassed++;
+    songAccuracy = songRawAccuracy / notePassed;
     health += healthChange;
     if (isComboBreak)
     {
