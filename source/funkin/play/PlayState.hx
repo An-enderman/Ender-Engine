@@ -1613,11 +1613,44 @@ class PlayState extends MusicBeatSubState
   }
 
   /**
+     * Sets the healthbar colors.
+     */
+  public function setHealthbarColors(isOpponent:Bool, color:Null<FlxColor> = null):Void
+  {
+    if (!isOpponent)
+    {
+      if (color == null)
+      {
+        healthColorP1 = Constants.COLOR_HEALTH_BAR_GREEN;
+      }
+      else
+      {
+        healthColorP1 = color;
+      }
+      healthBar.createColoredFilledBar(healthColorP1);
+    }
+    else
+    {
+      if (color == null)
+      {
+        healthColorP2 = Constants.COLOR_HEALTH_BAR_RED;
+      }
+      else
+      {
+        healthColorP2 = color;
+      }
+      healthBar.createColoredEmptyBar(healthColorP2);
+    }
+    healthBar.updateBar();
+  }
+
+  /**
      * Initializes the health bar on the HUD.
      */
   function initHealthBar():Void
   {
     var healthBarYPos:Float = Preferences.downscroll ? FlxG.height * 0.1 : FlxG.height * 0.9;
+
     healthBarBG = FunkinSprite.create(0, healthBarYPos, 'healthBar');
     healthBarBG.screenCenter(X);
     healthBarBG.scrollFactor.set(0, 0);
@@ -1627,7 +1660,8 @@ class PlayState extends MusicBeatSubState
     healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
       'healthLerp', 0, 2);
     healthBar.scrollFactor.set();
-    healthBar.createFilledBar(healthColorP2, healthColorP1);
+    setHealthbarColors(true);
+    setHealthbarColors(false);
     healthBar.zIndex = 801;
     add(healthBar);
 
@@ -1753,6 +1787,7 @@ class PlayState extends MusicBeatSubState
       iconP2 = new HealthIcon('dad', 1);
       iconP2.y = healthBar.y - (iconP2.height / 2);
       dad.initHealthIcon(true); // Apply the character ID here
+      dad.initHealthBarColor(true);
       iconP2.zIndex = 850;
       add(iconP2);
       iconP2.cameras = [camHUD];
@@ -1776,6 +1811,7 @@ class PlayState extends MusicBeatSubState
       iconP1 = new HealthIcon('bf', 0);
       iconP1.y = healthBar.y - (iconP1.height / 2);
       boyfriend.initHealthIcon(false); // Apply the character ID here
+      boyfriend.initHealthBarColor(false);
       iconP1.zIndex = 850;
       add(iconP1);
       iconP1.cameras = [camHUD];

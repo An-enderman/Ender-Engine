@@ -19,7 +19,7 @@ class Constants
    * The title of the game, for debug printing purposes.
    * Change this if you're making an engine.
    */
-  public static final TITLE:String = "Friday Night Funkin'";
+  public static final TITLE:String = "Friday Night Funkin': Ender Engine";
 
   /**
    * The current version number of the game.
@@ -132,6 +132,11 @@ class Constants
    * The color used by the player health bar.
    */
   public static final COLOR_HEALTH_BAR_GREEN:FlxColor = 0xFF66FF33;
+
+  /**
+   * The color used by the old player icon easter egg.
+   */
+  public static final COLOR_HEALTH_BAR_OLD_ICON:FlxColor = 0xFFE9FF48;
 
   /**
    * The base colors used by notes.

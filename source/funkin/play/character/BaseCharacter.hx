@@ -1,6 +1,7 @@
 package funkin.play.character;
 
 import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
 import funkin.modding.events.ScriptEvent;
 import funkin.play.character.CharacterData.CharacterDataParser;
 import funkin.play.character.CharacterData.CharacterRenderType;
@@ -343,6 +344,18 @@ class BaseCharacter extends Bopper
         return;
       }
       PlayState.instance.iconP2.configure(_data?.healthIcon);
+    }
+  }
+
+  public function initHealthBarColor(isOpponent:Bool):Void
+  {
+    if (_data?.healthbarColor == null)
+    {
+      PlayState.instance.setHealthbarColors(isOpponent);
+    }
+    else
+    {
+      PlayState.instance.setHealthbarColors(isOpponent, FlxColor.fromString(_data?.healthbarColor));
     }
   }
 

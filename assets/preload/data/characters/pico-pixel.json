@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "Pico (Playable)",
   "assetPath": "characters/picoPixel/picoPixel",
+  "healthbarColor": "#88ff58",
   "healthIcon": {
     "id": "pico-pixel",
     "flipX": false,

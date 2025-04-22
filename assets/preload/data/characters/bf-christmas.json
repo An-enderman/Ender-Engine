@@ -3,6 +3,7 @@
   "name": "Boyfriend (Christmas)",
   "assetPath": "characters/bfChristmas",
   "flipX": true,
+  "healthbarColor": "#31b0d1",
   "healthIcon": {
     "id": "bf"
   },

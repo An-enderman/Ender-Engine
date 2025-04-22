@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "Spirit",
   "assetPath": "characters/spirit",
+  "healthbarColor": "#ff3c6e",
   "singTime": 8.0,
   "renderType": "packer",
   "isPixel": true,

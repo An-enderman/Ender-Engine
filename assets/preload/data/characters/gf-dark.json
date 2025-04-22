@@ -4,6 +4,7 @@
   "renderType": "sparrow",
   "assetPath": "characters/gf_dark",
   "startingAnimation": "danceRight",
+  "healthbarColor": "#a5004d",
   "healthIcon": {
     "id": "gf",
     "flipX": false

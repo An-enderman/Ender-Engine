@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "Girlfriend (Car)",
   "assetPath": "characters/gfCar",
+  "healthbarColor": "#a5004d",
   "startingAnimation": "danceRight",
   "cameraOffsets": [0, -200],
   "animations": [

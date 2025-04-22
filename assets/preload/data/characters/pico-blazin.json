@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "Pico (Blazin')",
   "assetPath": "shared:characters/picoBlazin",
+  "healthbarColor": "#b7d855",
   "healthIcon": {
     "id": "pico"
   },

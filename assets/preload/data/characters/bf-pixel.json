@@ -4,6 +4,7 @@
   "assetPath": "characters/bfPixel",
   "flipX": true,
   "renderType": "multisparrow",
+  "healthbarColor": "#7bd6f6",
   "singTime": 8.0,
   "isPixel": true,
   "healthIcon": {

@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "Pico (Playable) (Dark)",
   "assetPath": "characters/pico_dark",
+  "healthbarColor": "#b7d855",
   "healthIcon": {
     "id": "pico",
     "flipX": false

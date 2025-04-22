@@ -3,6 +3,7 @@
   "name": "Girlfriend",
   "assetPath": "characters/GF_assets",
   "startingAnimation": "danceRight",
+  "healthbarColor": "#a5004d",
   "singTime": 8.0,
   "animations": [
     {

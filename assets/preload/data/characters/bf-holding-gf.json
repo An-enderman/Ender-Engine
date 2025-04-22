@@ -3,6 +3,7 @@
   "name": "Boyfriend (Holding GF)",
   "assetPath": "characters/bfAndGF",
   "flipX": true,
+  "healthbarColor": "#31b0d1",
   "renderType": "multisparrow",
   "healthIcon": {
     "id": "bf"

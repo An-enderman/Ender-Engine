@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "Pico (Holding Nene)",
   "assetPath": "characters/picoAndNene",
+  "healthbarColor": "#b7d855",
   "healthIcon": {
     "id": "pico",
     "flipX": false

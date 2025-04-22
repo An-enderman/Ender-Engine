@@ -12,6 +12,7 @@ import funkin.util.assets.DataAssets;
 import funkin.util.VersionUtil;
 import haxe.Json;
 import flixel.graphics.frames.FlxFrame;
+import flixel.util.FlxColor;
 
 class CharacterDataParser
 {
@@ -492,6 +493,11 @@ class CharacterDataParser
       input.cameraOffsets = DEFAULT_OFFSETS;
     }
 
+    if (input.healthbarColor == null || FlxColor.fromString(input.healthbarColor) == null)
+    {
+      input.healthbarColor = null;
+    }
+
     if (input.healthIcon == null)
     {
       input.healthIcon =
@@ -679,6 +685,11 @@ typedef CharacterData =
    * Optional data about the health icon for the character.
    */
   var healthIcon:Null<HealthIconData>;
+
+  /**
+   * Optional data about the healthbar color for the character.
+   */
+  var healthbarColor:Null<String>;
 
   var death:Null<DeathData>;
 

@@ -3,6 +3,7 @@
   "name": "Spooky Kids (Dark)",
   "renderType": "sparrow",
   "assetPath": "characters/spooky_dark",
+  "healthbarColor": "#d57e00",
   "singTime": 8.0,
   "healthIcon": {
     "id": "spooky",

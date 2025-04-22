@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "Daddy Dearest",
   "assetPath": "characters/daddyDearest",
+  "healthbarColor": "#af66ce",
   "singTime": 8.0,
   "animations": [
     {

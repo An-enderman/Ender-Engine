@@ -3,6 +3,7 @@
   "name": "Boyfriend",
   "renderType": "multisparrow",
   "assetPath": "characters/BOYFRIEND",
+  "healthbarColor": "#31b0d1",
   "flipX": true,
   "singTime": 8.0,
   "animations": [

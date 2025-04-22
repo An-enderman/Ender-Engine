@@ -3,6 +3,7 @@
   "name": "Boyfriend (Dark)",
   "renderType": "multisparrow",
   "assetPath": "characters/bf_dark",
+  "healthbarColor": "#31b0d1",
   "flipX": true,
   "healthIcon": {
     "id": "bf",
