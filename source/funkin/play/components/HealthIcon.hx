@@ -162,7 +162,7 @@ class HealthIcon extends FunkinSprite
       characterId = 'bf-old';
       isPixel = false;
       loadCharacter(characterId);
-      PlayState.instance.setHealthbarColors(false, Constants.COLOR_HEALTH_BAR_OLD_ICON);
+      PlayState.instance.setHealthbarColors(false, Constants.COLOR_HEALTH_BAR_GREEN);
     }
 
     lerpIconSize(true);

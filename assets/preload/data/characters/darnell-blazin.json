@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
   "name": "Darnell (Blazin')",
-  "healthbarColor": "#735eb0",
   "assetPath": "shared:characters/darnellBlazin",
+  "healthbarColor": "#735eb0",
   "healthIcon": {
     "id": "darnell"
   },

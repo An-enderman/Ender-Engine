@@ -351,7 +351,7 @@ class BaseCharacter extends Bopper
   {
     if (_data?.healthbarColor == null)
     {
-      PlayState.instance.setHealthbarColors(isOpponent);
+      PlayState.instance.setHealthbarColors(isOpponent, Constants.COLOR_HEALTH_BAR_GRAY);
     }
     else
     {
@@ -566,17 +566,40 @@ class BaseCharacter extends Bopper
 
     if (event.note.noteData.getMustHitNote() && characterType == BF)
     {
-      // If the note is from the same strumline, play the sing animation.
+      // If the note is from the same strumline, play the miss animation.
       this.playSingAnimation(event.note.noteData.getDirection(), true);
     }
     else if (!event.note.noteData.getMustHitNote() && characterType == DAD)
     {
-      // If the note is from the same strumline, play the sing animation.
+      // If the note is from the same strumline, play the miss animation.
       this.playSingAnimation(event.note.noteData.getDirection(), true);
     }
     else if (event.note.noteData.getMustHitNote() && characterType == GF)
     {
-      playComboDropAnimation(Highscore.tallies.combo);
+      playComboDropAnimation(event.comboCount);
+    }
+  }
+
+  public override function onNoteHoldDrop(event:HoldNoteScriptEvent)
+  {
+    super.onNoteHoldDrop(event);
+
+    // If another script cancelled the event, don't do anything.
+    if (event.eventCanceled) return;
+
+    if (event.holdNote.noteData.getMustHitNote() && characterType == BF)
+    {
+      // If the note is from the same strumline, play the miss animation.
+      this.playSingAnimation(event.holdNote.noteData.getDirection(), true);
+    }
+    else if (!event.holdNote.noteData.getMustHitNote() && characterType == DAD)
+    {
+      // If the note is from the same strumline, play the miss animation.
+      this.playSingAnimation(event.holdNote.noteData.getDirection(), true);
+    }
+    else if (event.holdNote.noteData.getMustHitNote() && event.isComboBreak && characterType == GF)
+    {
+      playComboDropAnimation(event.comboCount);
     }
   }
 

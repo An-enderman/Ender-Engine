@@ -2,9 +2,9 @@
   "version": "1.0.1",
   "name": "Boyfriend (Pixel)",
   "assetPath": "characters/bfPixel",
+  "healthbarColor": "#7bd6f6",
   "flipX": true,
   "renderType": "multisparrow",
-  "healthbarColor": "#7bd6f6",
   "singTime": 8.0,
   "isPixel": true,
   "healthIcon": {

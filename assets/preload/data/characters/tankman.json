@@ -1,11 +1,11 @@
 {
   "version": "1.0.0",
   "renderType": "multisparrow",
-  "healthbarColor": "#ffffff",
   "offsets": [0, -50],
   "danceEvery": 1,
   "scale": 1,
   "name": "Tankman",
+  "healthbarColor": "#e1e1e1",
   "flipX": true,
   "cameraOffsets": [0, 0],
   "singTime": 8,

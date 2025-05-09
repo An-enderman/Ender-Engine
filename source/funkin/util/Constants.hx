@@ -134,7 +134,12 @@ class Constants
   public static final COLOR_HEALTH_BAR_GREEN:FlxColor = 0xFF66FF33;
 
   /**
-   * The color used by the old player icon easter egg.
+   * The color used if the healthbar color in the jason is not present.
+   */
+  public static final COLOR_HEALTH_BAR_GRAY:FlxColor = 0xFFA1A1A1;
+
+  /**
+   * The color used by the old icon.
    */
   public static final COLOR_HEALTH_BAR_OLD_ICON:FlxColor = 0xFFE9FF48;
 
@@ -242,6 +247,11 @@ class Constants
    * Standardized variations for charts
    */
   public static final DEFAULT_VARIATION_LIST:Array<String> = ['default', 'erect', 'pico', 'bf'];
+
+  /**
+   * Default sticker pack for transitions
+   */
+  public static final DEFAULT_STICKER_PACK:String = 'default';
 
   /**
    * The default intensity multiplier for camera bops.
@@ -463,27 +473,32 @@ class Constants
   /**
    * The amount of health the player gains, while holding a hold note, per second.
    */
-  public static final HEALTH_HOLD_BONUS_PER_SECOND:Float = 7.5 / 100.0 * HEALTH_MAX; // +7.5% / second
+  public static final HEALTH_HOLD_BONUS_PER_SECOND:Float = 6.0 / 100.0 * HEALTH_MAX; // +6.0% / second
 
   /**
    * The amount of health the player loses upon missing a note.
    */
-  public static final HEALTH_MISS_PENALTY:Float = 4.0 / 100.0 * HEALTH_MAX; // 4.0%
+  public static final HEALTH_MISS_PENALTY:Float = -4.0 / 100.0 * HEALTH_MAX; // 4.0%
 
   /**
    * The amount of health the player loses upon pressing a key when no note is there.
    */
-  public static final HEALTH_GHOST_MISS_PENALTY:Float = 2.0 / 100.0 * HEALTH_MAX; // 2.0%
+  public static final HEALTH_GHOST_MISS_PENALTY:Float = -4.0 / 100.0 * HEALTH_MAX; // 2.0%
 
   /**
-   * The amount of health the player loses upon letting go of a hold note while it is still going.
+   * The amount of health the player loses upon letting go of a hold note, per second remaining.
    */
-  public static final HEALTH_HOLD_DROP_PENALTY:Float = 0.0; // 0.0%
+  public static final HEALTH_HOLD_DROP_PENALTY_PER_SECOND:Float = 0 / 100.0 * HEALTH_MAX; // -4.5% / second
+
+  /**
+   * The maximum amount of health the player can lose upon letting go of a hold note.
+   */
+  public static final HEALTH_HOLD_DROP_PENALTY_MAX:Float = 0 / 100.0 * HEALTH_MAX; // -10.0%
 
   /**
    * The amount of health the player loses upon hitting a mine.
    */
-  public static final HEALTH_MINE_PENALTY:Float = 15.0 / 100.0 * HEALTH_MAX; // 15.0%
+  public static final HEALTH_MINE_PENALTY:Float = -15.0 / 100.0 * HEALTH_MAX; // 15.0%
 
   /**
    * SCORE VALUES
@@ -491,10 +506,20 @@ class Constants
   // ==============================
 
   /**
-   * The amount of score the player gains for every send they hold a hold note.
+   * The amount of score the player gains for every second they hold a hold note.
    * A fraction of this value is granted every frame.
    */
   public static final SCORE_HOLD_BONUS_PER_SECOND:Float = 250.0;
+
+  /**
+   * The amount of score the player loses upon letting go of a hold note, per second remaining.
+   */
+  public static final SCORE_HOLD_DROP_PENALTY_PER_SECOND:Float = -125.0;
+
+  /**
+   * The minimum amount of the hold note, in milliseconds, before the player gets penalized for letting go of it early.
+   */
+  public static final HOLD_DROP_PENALTY_THRESHOLD_MS:Float = 160.0;
 
   public static final JUDGEMENT_KILLER_COMBO_BREAK:Bool = false;
   public static final JUDGEMENT_SICK_COMBO_BREAK:Bool = false;
@@ -580,7 +605,7 @@ class Constants
   /**
    * The horizontal offset of the strumline from the left edge of the screen.
    */
-  public static final STRUMLINE_X_OFFSET:Float = 70;
+  public static final STRUMLINE_X_OFFSET:Float = 48;
 
   /**
    * The vertical offset of the strumline from the top edge of the screen.

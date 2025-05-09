@@ -2,8 +2,8 @@
   "version": "1.0.0",
   "name": "Girlfriend",
   "assetPath": "characters/GF_assets",
-  "startingAnimation": "danceRight",
   "healthbarColor": "#a5004d",
+  "startingAnimation": "danceRight",
   "singTime": 8.0,
   "animations": [
     {

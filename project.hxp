@@ -25,7 +25,7 @@ class Project extends HXProject {
 	 * REMEMBER TO CHANGE THIS WHEN THE GAME UPDATES!
 	 * You only have to change it here, the rest of the game will query this value.
 	 */
-	static final VERSION:String = "0.6.2";
+	static final VERSION:String = "0.6.4";
 
 	/**
 	 * The game's name. Used as the default window title.
@@ -64,7 +64,7 @@ class Project extends HXProject {
 	 * The company name for the game.
 	 * This appears in metadata in places I think.
 	 */
-	static final COMPANY:String = "the Ender Engine team";
+	static final COMPANY:String = "The Funkin' Crew";
 
   /**
    * Path to the Haxe script run before building the game.
@@ -306,7 +306,7 @@ class Project extends HXProject {
 	 */
 	function flair() {
 		// TODO: Implement this.
-		info("Friday Night Funkin': Ender Engine");
+		info("Friday Night Funkin'");
 		info("Initializing build...");
 
 		info("Target Version: " + VERSION);
@@ -773,13 +773,12 @@ class Project extends HXProject {
 		addAssetLibrary("weekend1", shouldEmbed, shouldPreload);
 		addAssetPath("assets/weekend1", "assets/weekend1", "weekend1", ["*"], exclude, shouldEmbed);
 
-		// Art asset library (where README and CHANGELOG pull from)
+		// Art asset library (where README pulls from)
 		var shouldEmbedArt = false;
 		var shouldPreloadArt = false;
 		addAssetLibrary("art", shouldEmbedArt, shouldPreloadArt);
 		addAsset("art/readme.txt", "do NOT readme.txt", "art", shouldEmbedArt);
 		addAsset("LICENSE.md", "LICENSE.md", "art", shouldEmbedArt);
-		addAsset("CHANGELOG.md", "CHANGELOG.md", "art", shouldEmbedArt);
 	}
 
   /**

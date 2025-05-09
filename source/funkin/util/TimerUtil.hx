@@ -2,7 +2,6 @@ package funkin.util;
 
 import funkin.util.tools.FloatTools;
 import haxe.Timer;
-import flixel.math.FlxMath;
 
 class TimerUtil
 {

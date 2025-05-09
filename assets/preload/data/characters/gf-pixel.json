@@ -3,7 +3,6 @@
   "name": "Girlfriend (Pixel)",
   "assetPath": "characters/gfPixel",
   "startingAnimation": "danceRight",
-  "healthbarColor": "#a5004d",
   "isPixel": true,
   "scale": 6,
   "animations": [
