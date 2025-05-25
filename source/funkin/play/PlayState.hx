@@ -44,6 +44,8 @@ import funkin.play.notes.notestyle.NoteStyle;
 import funkin.play.notes.Strumline;
 import funkin.play.notes.SustainTrail;
 import funkin.play.scoring.Scoring;
+import funkin.play.scoring.SongScore;
+import funkin.play.scoring.SongAccuracy;
 import funkin.play.song.Song;
 import funkin.play.stage.Stage;
 import funkin.save.Save;
@@ -196,27 +198,6 @@ class PlayState extends MusicBeatSubState
    * The player's current health.
    */
   public var health:Float = Constants.HEALTH_STARTING;
-
-  /**
-   * The player's current score.
-   * TODO: Move this to its own class.
-   */
-  public var songScore:Int = 0;
-
-  /**
-   * The player's current raw accuracy.
-   */
-  public var songRawAccuracy:Int = 0;
-
-  /**
-   * The player's current accuracy.
-   */
-  public var songAccuracy:Float = 0;
-
-  /**
-   * The player's current raw accuracy.
-   */
-  public var notePassed:Int = 0;
 
   /**
    * Start at this point in the song once the countdown is done.
@@ -724,6 +705,7 @@ class PlayState extends MusicBeatSubState
     {
       initMinimalMode();
     }
+    initHealthBarColors();
     initStrumlines();
     initPopups();
 
@@ -910,8 +892,8 @@ class PlayState extends MusicBeatSubState
       cameraZoomRate = Constants.DEFAULT_ZOOM_RATE;
 
       health = Constants.HEALTH_STARTING;
-      songScore = 0;
-      songAccuracy = 0;
+      SongScore.reset();
+      SongAccuracy.reset();
       Highscore.tallies.combo = 0;
       // timer for vwoosh
       var vwooshTimer = new FlxTimer();
@@ -1154,8 +1136,8 @@ class PlayState extends MusicBeatSubState
     playerStrumline.clean();
     opponentStrumline.clean();
 
-    songScore = 0;
-    songAccuracy = 0;
+    SongScore.reset();
+    SongAccuracy.reset();
     updateScoreText();
 
     health = Constants.HEALTH_STARTING;
@@ -1640,6 +1622,8 @@ class PlayState extends MusicBeatSubState
     scoreText.cameras = [camHUD];
   }
 
+  function initHealthBarColors():Void {}
+
   /**
      * Generates the stage and all its props.
      */
@@ -1836,8 +1820,8 @@ class PlayState extends MusicBeatSubState
     add(opponentStrumline);
 
     // Position the player strumline on the right half of the screen
-    playerStrumline.x = FlxG.width / 2 + Constants.STRUMLINE_X_OFFSET; // Classic style
-    // playerStrumline.x = FlxG.width - playerStrumline.width - Constants.STRUMLINE_X_OFFSET; // Centered style
+    // playerStrumline.x = FlxG.width / 2 + Constants.STRUMLINE_X_OFFSET; // Classic style
+    playerStrumline.x = FlxG.width - playerStrumline.width - Constants.STRUMLINE_X_OFFSET; // Centered style
     playerStrumline.y = Preferences.downscroll ? FlxG.height - playerStrumline.height - Constants.STRUMLINE_Y_OFFSET - noteStyle.getStrumlineOffsets()[1] : Constants.STRUMLINE_Y_OFFSET;
     playerStrumline.zIndex = 1001;
     playerStrumline.cameras = [camHUD];
@@ -2185,16 +2169,16 @@ class PlayState extends MusicBeatSubState
     {
       // TODO: Add an option for this maybe?
       var commaSeparated:Bool = true;
-      scoreText.text = 'Score: ${FlxStringUtil.formatMoney(songScore, false, commaSeparated)} ';
+      scoreText.text = 'Score: ${FlxStringUtil.formatMoney(SongScore.getPoints(), false, commaSeparated)} ';
 
       if (Highscore.tallies.missed > 0)
       {
         scoreText.text += '/ Misses: ${Highscore.tallies.missed} ';
       }
 
-      if (songAccuracy > 0)
+      if (!SongAccuracy.isPassedNotesZero())
       {
-        scoreText.text += '/ Accuracy: ${MathUtil.floorDecimal(songAccuracy, 2)}%';
+        scoreText.text += '/ Accuracy: ${MathUtil.floorDecimal(SongAccuracy.getCurrentAccuracy(), 2)}%';
       }
       else
       {
@@ -2441,7 +2425,7 @@ class PlayState extends MusicBeatSubState
         if (!isBotPlayMode)
         {
           health += Constants.HEALTH_HOLD_BONUS_PER_SECOND * elapsed;
-          songScore += Std.int(Constants.SCORE_HOLD_BONUS_PER_SECOND * elapsed);
+          SongScore.addToPoints(Std.int(Constants.SCORE_HOLD_BONUS_PER_SECOND * elapsed));
         }
 
         // Make sure the player keeps singing while the note is held by the bot.
@@ -2563,7 +2547,7 @@ class PlayState extends MusicBeatSubState
 
         // Play the strumline animation.
         playerStrumline.playPress(input.noteDirection);
-        trace('PENALTY Score: ${songScore}');
+        trace('PENALTY Score: ${SongScore.getPoints()}');
       }
     else if (notesInDirection.length == 0)
     {
@@ -2571,7 +2555,7 @@ class PlayState extends MusicBeatSubState
 
       // Play the strumline animation.
       playerStrumline.playPress(input.noteDirection);
-      trace('NO PENALTY Score: ${songScore}');
+      trace('NO PENALTY Score: ${SongScore.getPoints()}');
     }
     else
     {
@@ -2583,7 +2567,7 @@ class PlayState extends MusicBeatSubState
       // Judge and hit the note.
       // trace('Hit note! ${targetNote.noteData}');
       goodNoteHit(targetNote, input);
-      // trace('Score: ${songScore}');
+      // trace('Score: ${SongScore.getPoints()}');
 
       notesInDirection.remove(targetNote);
 
@@ -2712,7 +2696,7 @@ class PlayState extends MusicBeatSubState
     if (event.eventCanceled) return;
 
     health += event.healthChange;
-    songScore += event.scoreChange;
+    SongScore.addToPoints(event.scoreChange);
 
     if (!isPracticeMode)
     {
@@ -2806,29 +2790,28 @@ class PlayState extends MusicBeatSubState
   /**
      * Handles applying health, score, and ratings.
      */
-  function applyScore(score:Int, daRating:String, healthChange:Float, isComboBreak:Bool)
+  function applyScore(score:Int, daRating:String, healthChange:Float, isComboBreak:Bool):Void
   {
     switch (daRating)
     {
       case 'sick':
         Highscore.tallies.sick += 1;
-        songRawAccuracy += 100;
+        SongAccuracy.addToAccuracy(100);
       case 'good':
         Highscore.tallies.good += 1;
-        songRawAccuracy += 75;
+        SongAccuracy.addToAccuracy(75);
       case 'bad':
         Highscore.tallies.bad += 1;
-        songRawAccuracy += 50;
+        SongAccuracy.addToAccuracy(50);
       case 'shit':
         Highscore.tallies.shit += 1;
-        songRawAccuracy += 25;
+        SongAccuracy.addToAccuracy(25);
       case 'miss':
         Highscore.tallies.missed += 1;
+        SongAccuracy.addMissToAccuracy();
       default:
         // Nothing!
     }
-    notePassed++;
-    songAccuracy = songRawAccuracy / notePassed;
     health += healthChange;
     if (isComboBreak)
     {
@@ -2841,7 +2824,7 @@ class PlayState extends MusicBeatSubState
       Highscore.tallies.combo++;
       if (Highscore.tallies.combo > Highscore.tallies.maxCombo) Highscore.tallies.maxCombo = Highscore.tallies.combo;
     }
-    songScore += score;
+    SongScore.addToPoints(score);
   }
 
   /**
@@ -2972,7 +2955,7 @@ class PlayState extends MusicBeatSubState
       // crackhead double thingie, sets whether was new highscore, AND saves the song!
       var data =
         {
-          score: songScore,
+          score: SongScore.getPoints(),
           tallies:
             {
               sick: Highscore.tallies.sick,
@@ -2991,7 +2974,7 @@ class PlayState extends MusicBeatSubState
       Highscore.talliesLevel = Highscore.combineTallies(Highscore.tallies, Highscore.talliesLevel);
 
       #if FEATURE_NEWGROUNDS
-      Leaderboards.submitSongScore(currentSong.id, suffixedDifficulty, songScore);
+      Leaderboards.submitSongScore(currentSong.id, suffixedDifficulty, SongScore.getPoints());
       #end
 
       if (!isPracticeMode && !isBotPlayMode)
@@ -3021,7 +3004,7 @@ class PlayState extends MusicBeatSubState
       // Determine the score rank for this song we just finished.
       var scoreRank:ScoringRank = Scoring.calculateRank(
         {
-          score: songScore,
+          score: SongScore.getPoints(),
           tallies:
             {
               sick: Highscore.tallies.sick,
@@ -3053,7 +3036,7 @@ class PlayState extends MusicBeatSubState
     {
       isNewHighscore = false;
 
-      PlayStatePlaylist.campaignScore += songScore;
+      PlayStatePlaylist.campaignScore += SongScore.getPoints();
 
       // Pop the next song ID from the list.
       // Returns null if the list is empty.
@@ -3355,7 +3338,7 @@ class PlayState extends MusicBeatSubState
         prevScoreData: prevScoreData,
         scoreData:
           {
-            score: PlayStatePlaylist.isStoryMode ? PlayStatePlaylist.campaignScore : songScore,
+            score: PlayStatePlaylist.isStoryMode ? PlayStatePlaylist.campaignScore : SongScore.getPoints(),
             tallies:
               {
                 sick: talliesToUse.sick,
